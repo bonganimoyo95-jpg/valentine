@@ -23,9 +23,10 @@
         place-items: center;
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
         color: var(--text);
-        background: radial-gradient(1200px 800px at 20% 10%, var(--bg2), transparent 60%),
-                    radial-gradient(900px 700px at 80% 30%, var(--bg1), transparent 55%),
-                    linear-gradient(135deg, #ffffff, #fff7ed);
+        background:
+          radial-gradient(1200px 800px at 20% 10%, var(--bg2), transparent 60%),
+          radial-gradient(900px 700px at 80% 30%, var(--bg1), transparent 55%),
+          linear-gradient(135deg, #ffffff, #fff7ed);
         padding: 24px;
       }
 
@@ -59,10 +60,10 @@
         align-items: center;
         flex-wrap: wrap;
 
-        /* Important for “run away”: gives the No button room to move */
+        /* room for the “run away” effect */
         position: relative;
-        min-height: 110px;
-        padding: 10px;
+        min-height: 120px;
+        padding: 12px;
         overflow: hidden;
       }
 
@@ -102,13 +103,14 @@
       img {
         width: 100%;
         border-radius: 18px;
-        border: 1px solid rgba(0,0,0,0.08);
+        border: 1px solid rgba(0, 0, 0, 0.08);
       }
 
       .note {
         margin-top: 14px;
         font-size: 14px;
         opacity: 0.75;
+        min-height: 18px;
       }
     </style>
   </head>
@@ -117,7 +119,7 @@
     <main class="card" role="main" aria-live="polite">
       <section id="question">
         <h1>Will you be my valentine? 💘</h1>
-        <p>Choose wisely. The “No” button is a coward.</p>
+        <p>Choose wisely. The “No” button is… elusive.</p>
 
         <div class="buttons" id="btnArea">
           <button class="yes" id="yesBtn">Yes</button>
@@ -129,18 +131,17 @@
 
       <section id="celebration" class="hidden">
         <h1>YAYYYYY! 🎉💖</h1>
-        <p>You just made the timeline cuter.</p>
+        <p>Thierry Henry approves.</p>
 
         <div class="gif-wrap">
-          <!-- Swap this GIF URL with any celebration GIF you like -->
           <img
             id="celebrationGif"
-            alt="Celebration gif"
-            src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif"
+            alt="Thierry Henry celebrating"
+            src="assets/henry-thierry-henry.gif"
           />
         </div>
 
-        <p class="note">Tip: replace the GIF link in the code with your favorite one.</p>
+        <p class="note">If your GIF filename is different, update the src to match exactly.</p>
       </section>
     </main>
 
@@ -167,13 +168,13 @@
         const areaRect = btnArea.getBoundingClientRect();
         const btnRect = noBtn.getBoundingClientRect();
 
-        // How far can we move without leaving the button area?
+        // Available space to move within the button area:
         const maxLeft = btnRect.left - areaRect.left;
         const maxRight = areaRect.right - btnRect.right;
         const maxTop = btnRect.top - areaRect.top;
         const maxBottom = areaRect.bottom - btnRect.bottom;
 
-        const padding = 8;
+        const padding = 10;
 
         const dx = randBetween(-maxLeft + padding, maxRight - padding);
         const dy = randBetween(-maxTop + padding, maxBottom - padding);
@@ -181,8 +182,10 @@
         noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
       }
 
-      // Runs away on hover (desktop) and on attempted tap/click (mobile)
+      // Desktop: runs away on hover
       noBtn.addEventListener("pointerenter", moveNoButton);
+
+      // Mobile + desktop: runs away on attempted press
       noBtn.addEventListener("pointerdown", (e) => {
         e.preventDefault();
         moveNoButton();
@@ -191,8 +194,8 @@
         const messages = [
           "Nope. Too slow 😌",
           "Absolutely not catching me 🏃‍♀️💨",
-          "Skill issue 😅",
-          "Try “Yes” maybe? 💘",
+          "Try again… you won’t 😅",
+          "Suggestion: press “Yes” 💘",
         ];
         noNote.textContent = messages[Math.min(noClicks - 1, messages.length - 1)];
         noNote.setAttribute("aria-hidden", "false");
